@@ -1,10 +1,9 @@
 import Settings from "../Settings"
 
-
-register("chat", (pet,event) =>{
+register("chat", (level,pet,event) =>{
     if (Settings.autoPetFormatter) {
         cancel(event)
-        ChatLib.chat(`&3Autopet &9>&r ${pet}`)
+        ChatLib.chat(`&3Autopet &f> &a[Lvl${level}] ${pet}`)
     }
-}).setCriteria("&cAutopet &eequipped your ${pet}&e! &a&lVIEW RULE&r")
+}).setCriteria("&cAutopet &eequipped your &7[Lvl ${level}] ${pet}&e! &a&lVIEW RULE&r")
 
