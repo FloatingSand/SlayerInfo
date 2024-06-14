@@ -23,12 +23,20 @@ class Settings {
     }
 
     @SwitchProperty({
-        name: "Extreme Focus timer (coming soon)",
-        description: "Shows info such as total xp, kills, spawn times and time to kill.",
+        name: "Extreme Focus timer",
+        description: "Endstone Sword duration below crosshair",
         category: "General",
         subcategory: "Category",
     })
     endstoneSword = true;
+
+    @SwitchProperty({
+        name: "Format Autopet Rules",
+        description: "Make autopet rule look different, idk",
+        category: "General",
+        subcategory: "Category",
+    })
+    autoPetFormatter = true;
 
     constructor() {
         this.initialize(this);

@@ -1,4 +1,10 @@
-register("chat", () =>{
-    
-}).setCriteria("&r&aYou now have &r&${amount}&r&a Damage Resistance for 5 seconds and &r&6+${damageGained}&r&a damage on your next hit within 5 seconds!&r")
+import Settings from "../Settings"
+
+
+register("chat", (pet,event) =>{
+    if (Settings.autoPetFormatter) {
+        cancel(event)
+        ChatLib.chat(`&3Autopet &9>&r ${pet}`)
+    }
+}).setCriteria("&cAutopet &eequipped your ${pet}&e! &a&lVIEW RULE&r")
 
