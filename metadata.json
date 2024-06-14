@@ -1,0 +1,10 @@
+{
+    "description": "Display things for slayers",
+    "version": "1.0.0",
+    "author": "FloatingSand",
+    "entry":"index.js",
+    "requires": [
+    "requestV2",
+    "Vigilance"
+  ]
+}
