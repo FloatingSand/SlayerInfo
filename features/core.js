@@ -162,7 +162,12 @@ function checkMayor() {
             if (element.name == "Slayer XP Buff") isAatrox = true
         })
         if (isAatrox) {
-            ChatLib.chat("&5&l[SlayerTracker]:&r&4 25% XP Buff is Active")
+            if (xpGained.IV !== 625) {
+                for (x in xpGained) {
+                    xpGained[x] *= 1.25
+                }
+            }
+            ChatLib.chat("&5&l[SlayerTracker]:&r&a 25% XP Buff is Active")
         }
         else {
             ChatLib.chat("&5&l[SlayerTracker]:&r&4 No 25% XP Buff")
@@ -201,10 +206,16 @@ register("command", (...args) => {
     } else if (args[0].toLocaleLowerCase() === "reload") {
         getSlayerXP()
         checkMayor()
+        // testing purposes 
     } else if (args[0].toLowerCase() === "get") {
         Scoreboard.getLines().forEach(line => {
             console.log(ChatLib.removeFormatting(line))
         })
+    }
+    else if (args[0].toLowerCase() === "viewxp") {
+        for (x in xpGained) {
+            console.log(`${x}:${xpGained[x]}`)
+        }
     }
 }).setName("slayertracker")
 
@@ -258,9 +269,9 @@ register("chat", () => {
     spawned = false
     questActivated = false
 
-    if (isAatrox && typeOfSlayer !== 'vampires') xpGained[slayerTier] * 1.25
+    
 
-    if (slayerType == "vampires") {
+    if (!isAatrox && slayerType == "vampires") {
         xp[typeOfSlayer] += xpGainedVampires[slayerTier]
     } else {
         xp[typeOfSlayer] += xpGained[slayerTier]

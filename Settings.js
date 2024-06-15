@@ -1,6 +1,6 @@
 import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, Color } from '../Vigilance';
 
-@Vigilant("Slayer Tracker Settings")
+@Vigilant("SlayerMod/config")
 class Settings {
     @TextProperty({
         name: "API key",
@@ -22,21 +22,6 @@ class Settings {
         java.awt.Desktop.getDesktop().browse(new java.net.URL('https://developer.hypixel.net/dashboard').toURI());
     }
 
-    @SwitchProperty({
-        name: "Extreme Focus timer",
-        description: "Endstone Sword duration below crosshair",
-        category: "General",
-        subcategory: "Category",
-    })
-    endstoneSword = true;
-
-    @SwitchProperty({
-        name: "Format Autopet Rules",
-        description: "Make autopet rule look different, idk",
-        category: "General",
-        subcategory: "Category",
-    })
-    autoPetFormatter = true;
 
     constructor() {
         this.initialize(this);
