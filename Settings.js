@@ -1,12 +1,21 @@
-import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, Color } from '../Vigilance';
+import { @Vigilant, 
+        @TextProperty, 
+        @ColorProperty, 
+        @ButtonProperty, 
+        @SwitchProperty,
+        @CheckboxProperty, 
+        Color 
+    } from '../Vigilance';
+
 
 @Vigilant("SlayerMod/config")
+
 class Settings {
     @TextProperty({
         name: "API key",
-        description: "Example of text input that does not wrap the text",
+        description: "Input Api key",
         category: "General",
-        subcategory: "Category",
+        subcategory: "API",
         placeholder: "Empty... :("
     })
     apiInput = "";
@@ -15,7 +24,7 @@ class Settings {
         name: "Get API key",
         description: "goes to https://developer.hypixel.net/dashboard",
         category: "General",
-        subcategory: "Category",
+        subcategory: "API",
         placeholder: "Open"
     })
     myButtonAction() {
@@ -25,11 +34,7 @@ class Settings {
 
     constructor() {
         this.initialize(this);
-        // this.registerListener("text", newText => {
-        //     console.log(`Text changed to ${newText}`);
-        // });
-        this.setCategoryDescription("Basic slayer stuff")
-        this.setSubcategoryDescription("General", "General Category", "API and other stuff")
+        
     }
 }
 

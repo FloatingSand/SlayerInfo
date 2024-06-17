@@ -6,4 +6,5 @@ Probably will convert this to kotlin when I stop procrastinating
 ## Features
 * Track slayer xp and kills
 * Track boss spawn and kill times
+* Smoldering Polarization and Wisp's Ice-Flavored potion duration display
 

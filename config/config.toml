@@ -1,8 +1,6 @@
 
 [general]
 
-	[general.category]
-		extreme_focus_timer = false
+	[general.api]
 		api_key = "9accd0da-6fcc-448d-95fc-00d0c9d9b9a6"
-		format_autopet_rules = false
 
