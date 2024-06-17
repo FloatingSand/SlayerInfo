@@ -266,16 +266,8 @@ register("chat", () => {
     let bossSpawnedAndKilled = Math.floor((endDate - startDate) / 1000)
     let spawnTime = Math.floor((slayerSpawnDate - startDate) / 1000)
     let bossKilled = ((endDate - slayerSpawnDate) / 1000).toFixed(2)
-    let rngMeter 
     if (name !== undefined) {
         setTimeout(() => {
-            let tabLines = TabList.getNames()
-            for (let i=0;i<tabLines.length;i++) {
-                if (tabLines[i].removeFormatting().includes("RNG Meter:")) {
-                    rngMeter = `&5[RNG Meter]:${tabLines[i+1]} - ${tabLines[i+2]}`
-                    break
-                }
-            }
             if (apiKeyWorks) {
                 ChatLib.chat(`&5&l[${name} ${slayerTier}]: &a${xp[typeOfSlayer].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}&r &dXP | &a${kills[typeOfSlayer][slayerTier].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} &dKills&r`)
             } else {
@@ -285,14 +277,30 @@ register("chat", () => {
             }
                 // ChatLib.chat(`&d Slayer took &r&a${bossSpawnedAndKilled}&d seconds to spawn and kill&r`)
                 // ChatLib.chat(`&d Slayer took &r&a${bossKilled}&d seconds to kill&r`)
-                ChatLib.chat(`&5>&d Total: &a${bossSpawnedAndKilled}&d seconds | Spawn: &a${spawnTime}&d seconds | Kill: &a${bossKilled}&d seconds`)
-
-            if (rngMeter === undefined) ChatLib.chat("&5&l[SlayerTracker]:&r&4Turn on RNG Meter widget to view meter")
-            else  ChatLib.chat(rngMeter)
-            
+                ChatLib.chat(`&5>&d Total: &a${bossSpawnedAndKilled}&d seconds | Spawn: &a${spawnTime}&d seconds | Kill: &a${bossKilled}&d seconds`)   
         }, 1000);
     }
 }).setCriteria("&r  &r&a&lSLAYER QUEST COMPLETE!&r")
+
+// rng meter
+register('chat', (amount,event) => {
+    cancel(event)
+    let tabLines = TabList.getNames()
+    let rngMeter 
+    for (let i=0;i<tabLines.length;i++) {
+        if (tabLines[i].removeFormatting().includes("RNG Meter:")) {
+            let unupdatedMeter = tabLines[i+2].removeFormatting().split("/")
+            unupdatedMeter[0] = amount
+            rngMeter = `&5[RNG Meter]:${tabLines[i+1]} - &d${unupdatedMeter.join('/')}`
+            break
+        }
+    }
+    setTimeout(() => {
+        ChatLib.chat(rngMeter)
+    }, 1000);
+
+}).setCriteria("   &dRNG Meter &f- &d${amount} Stored XP&r")
+
 
 
 
