@@ -184,6 +184,7 @@ function checkMayor() {
 }
 
 register('serverConnect', () => {
+    disconnected = false;
     if (Settings.apiInput == '') {
         setTimeout(() => {
             ChatLib.chat('&5&l[SlayerTracker]:&r&4 run /slayertracker to set API key')
@@ -197,26 +198,16 @@ register('serverConnect', () => {
 })
 
 register("command", (...args) => {
-    if (!args)  {
+    if (!args || args[0] === undefined) {
         Settings.openGUI()
         return
-}
-    if (args[0].toLowerCase() === "help") {
-        ChatLib.chat(`reload - sends a new request to the API for updated slayer and mayor values \n setAPI - grabs your API key from the clipboard`)
-    } else if (args[0].toLocaleLowerCase() === "reload") {
+    }
+    else if (args[0].toLocaleLowerCase() === "reload") {
         getSlayerXP()
         checkMayor()
-        // testing purposes 
-    } else if (args[0].toLowerCase() === "get") {
-        Scoreboard.getLines().forEach(line => {
-            console.log(ChatLib.removeFormatting(line))
-        })
     }
-    else if (args[0].toLowerCase() === "viewxp") {
-        for (x in xpGained) {
-            console.log(`${x}:${xpGained[x]}`)
-        }
-    }
+
+
 }).setName("slayertracker")
 
 
@@ -297,5 +288,11 @@ if (name !== undefined) {
     }, 1000);
 }
 }).setCriteria("&r  &r&a&lSLAYER QUEST COMPLETE!&r")
+
+
+
+export {
+    questActivated
+}
 
 
