@@ -11,7 +11,7 @@ const effectHUD = new PogObject("SlayerMod", {
 }, "config/effects.json");
 
 function minuteSecondFormat(time) {
-    if (time <= 0 ) return '&cINACTIVE'
+    if (time <= 1 ) return '&cINACTIVE'
     const minutes = `${Math.floor(time / 60)}`.padStart(2, "0");
     const seconds = `${time - minutes * 60}`.padStart(2, "0");
     return `${minutes}:${seconds}`;
@@ -24,8 +24,7 @@ function inDungeons() {
         console.log(e) 
     }
 }
-let smolderingPolarization = effectHUD.smoldering
-let wispIceFlavoredWater = effectHUD.wisp
+
 
 const smolderingDisplay = new Display().setBackgroundColor(Renderer.color(0, 0, 0, 100)).setBackground("FULL");
 smolderingDisplay.setLine(0,` &aPolarization&r: ${minuteSecondFormat(effectHUD.smoldering)}  `)
@@ -57,8 +56,8 @@ register("command", (...args) => {
             ChatLib.chat('&5&l[SlayerTracker]:&fEffect Hud has been toggled: &cOFF')
         }
     } else if (args[0].toLowerCase() === "move") {
-        smolderingDisplay.setRenderLoc(Renderer.screen.getWidth()-100, Renderer.screen.getHeight()/2 - 140)
-        effectHUD.x = Renderer.screen.getWidth()-100
+        smolderingDisplay.setRenderLoc(Renderer.screen.getWidth()-130, Renderer.screen.getHeight()/2 - 140)
+        effectHUD.x = Renderer.screen.getWidth()-130
         effectHUD.y = Renderer.screen.getHeight()/2 - 140
         effectHUD.save()
     }
@@ -81,9 +80,10 @@ register('gameunload', () => {
 })
 
 register('step', () => {
+    if (effectHUD.smoldering <= 0 && effectHUD.wisp <= 0) return
     if (!Scoreboard.getTitle().removeFormatting().includes("SKYBLOCK") || inDungeons() ) return
-    if (smolderingPolarization >= 0) effectHUD.smoldering--
-    if (wispIceFlavoredWater >= 0) effectHUD.wisp--
+    if (effectHUD.smoldering >= 0) effectHUD.smoldering--
+    if (effectHUD.wisp >= 0) effectHUD.wisp--
     
     smolderingDisplay.setLine(0,` &aPolarization&r: ${minuteSecondFormat(effectHUD.smoldering)}  `)
     smolderingDisplay.setLine(1,` &fWisp&r: ${minuteSecondFormat(effectHUD.wisp)} `)
