@@ -173,8 +173,6 @@ function checkMayor() {
             ChatLib.chat("&5&l[SlayerTracker]:&r&4 No 25% XP Buff")
             isAatrox = false
         }
-
-        
     }).catch(e => {
         setTimeout(() => {
             ChatLib.chat('&5&l[SlayerTracker]:&r&4Failed to find out the mayor &r \n run &4/slayertracker reload or check API key&r')
@@ -184,7 +182,6 @@ function checkMayor() {
 }
 
 register('serverConnect', () => {
-    disconnected = false;
     if (Settings.apiInput == '') {
         setTimeout(() => {
             ChatLib.chat('&5&l[SlayerTracker]:&r&4 run /slayertracker to set API key')
@@ -192,9 +189,7 @@ register('serverConnect', () => {
     } else {
         getSlayerXP() 
         checkMayor()
-    }
-    
-    
+    }  
 })
 
 register("command", (...args) => {
@@ -235,9 +230,10 @@ register('step', () => {
         if (thisLine.includes("Slay the boss!") && !spawned) {
             slayerSpawnDate = Date.now()
             spawned = true
-        } else if (thisLine.includes("Slayer Quest") && !questActivated) {
+        } 
+        if (thisLine.includes("Slayer Quest") && !questActivated) {
             questActivated = true
-            slayerNames.forEach((element,I) => {
+            slayerNames.forEach(element => {
                 if (ChatLib.removeFormatting(currentScoreboard[i-1]).toString().includes(element)) {
                     typeOfSlayer = slayerType(ChatLib.removeFormatting(currentScoreboard[i-1]).toString())
                 }
@@ -260,39 +256,45 @@ register("chat", () => {
     spawned = false
     questActivated = false
 
-    
-
     if (!isAatrox && slayerType == "vampires") {
         xp[typeOfSlayer] += xpGainedVampires[slayerTier]
     } else {
         xp[typeOfSlayer] += xpGained[slayerTier]
-
     }
     kills[typeOfSlayer][slayerTier]++
 
-let bossSpawnedAndKilled = Math.floor((endDate - startDate) / 1000)
-let bossKilled = ((endDate - slayerSpawnDate) / 1000).toFixed(2)
-if (name !== undefined) {
-    setTimeout(() => {
-        if (apiKeyWorks) {
-            ChatLib.chat(`&5&l[${name} ${slayerTier}]: &a${xp[typeOfSlayer].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}&r &dXP | &a${kills[typeOfSlayer][slayerTier].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} &dKills&r`)
-        } else {
-            ChatLib.chat("&5&l[SlayerTracker]:&r&4 Something went wrong with the API")
-            xp[typeOfSlayer] += xpGained
-            kills[typeOfSlayer][slayerTier]++
-        }
-        if (slayerSpawnDate !== undefined && startDate !== undefined ) {
-            ChatLib.chat(`&d Slayer took &r&a${bossSpawnedAndKilled}&d seconds to spawn and kill&r`)
-            ChatLib.chat(`&d Slayer took &r&a${bossKilled}&d seconds to kill&r`)
-        }
-    }, 1000);
-}
+    let bossSpawnedAndKilled = Math.floor((endDate - startDate) / 1000)
+    let spawnTime = Math.floor((slayerSpawnDate - startDate) / 1000)
+    let bossKilled = ((endDate - slayerSpawnDate) / 1000).toFixed(2)
+    let rngMeter 
+    if (name !== undefined) {
+        setTimeout(() => {
+            let tabLines = TabList.getNames()
+            for (let i=0;i<tabLines.length;i++) {
+                if (tabLines[i].removeFormatting().includes("RNG Meter:")) {
+                    rngMeter = `&5[RNG Meter]:${tabLines[i+1]} - ${tabLines[i+2]}`
+                    break
+                }
+            }
+            if (apiKeyWorks) {
+                ChatLib.chat(`&5&l[${name} ${slayerTier}]: &a${xp[typeOfSlayer].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}&r &dXP | &a${kills[typeOfSlayer][slayerTier].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} &dKills&r`)
+            } else {
+                ChatLib.chat("&5&l[SlayerTracker]:&r&4 Unable to fetch slayer data from API")
+                xp[typeOfSlayer] += xpGained
+                kills[typeOfSlayer][slayerTier]++
+            }
+                // ChatLib.chat(`&d Slayer took &r&a${bossSpawnedAndKilled}&d seconds to spawn and kill&r`)
+                // ChatLib.chat(`&d Slayer took &r&a${bossKilled}&d seconds to kill&r`)
+                ChatLib.chat(`&5>&d Total: &a${bossSpawnedAndKilled}&d seconds | Spawn: &a${spawnTime}&d seconds | Kill: &a${bossKilled}&d seconds`)
+
+            if (rngMeter === undefined) ChatLib.chat("&5&l[SlayerTracker]:&r&4Turn on RNG Meter widget to view meter")
+            else  ChatLib.chat(rngMeter)
+            
+        }, 1000);
+    }
 }).setCriteria("&r  &r&a&lSLAYER QUEST COMPLETE!&r")
 
 
 
-export {
-    questActivated
-}
 
 
