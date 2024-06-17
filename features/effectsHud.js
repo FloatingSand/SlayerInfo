@@ -71,6 +71,10 @@ register("command", (...args) => {
 register('chat', () => {
     effectHUD.smoldering = 3600
 }).setCriteria('&r&aYou ate a &r&aRe-heated Gummy Polar Bear&r&a!&r')
+register('chat', () => {
+    if (TabList.getNames().some( a => a.removeFormatting().includes("Parrot"))) effectHUD.wisp = 2400
+    else effectHUD.wisp = 1800
+}).setCriteria("&a&lBUFF! &fYou splashed yourself with &r&bWisp's Ice-Flavored Water I&r&f! Press TAB or type /effects to view your active effects!&r")
 
 register('gameunload', () => {
     effectHUD.save() 
