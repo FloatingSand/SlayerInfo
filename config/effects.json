@@ -1,7 +1,7 @@
 {
-    "smoldering": 3053,
-    "wisp": -171,
-    "toggle": false,
-    "x": 860,
+    "smoldering": 0,
+    "wisp": -1,
+    "toggle": true,
+    "x": 830,
     "y": 112.5
 }

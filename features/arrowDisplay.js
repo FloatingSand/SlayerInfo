@@ -6,12 +6,14 @@ const arrowHUDCONFIG = new PogObject("SlayerMod", {
     y: undefined
 }, "config/arrowHud.json");
 
+
 let arrowCount = undefined
 let toxicTotal = 0
 let twilightTotal = 0
 
+
 const arrowHud = new Display().setBackgroundColor(Renderer.color(0, 0, 0, 100)).setBackground("FULL");
-arrowHud.setLine(0,`&6Arrow: &f${arrowCount} &6| &dTwilight: &f${twilightTotal} &6| &aToxic: &f${toxicTotal}`)
+arrowHud.setLine(0,`&6Arrow: &f??? &6| &dTwilight: &c${twilightTotal} &6| &aToxic: &f${toxicTotal}`)
 if (arrowHUDCONFIG.x === undefined || arrowHUDCONFIG.y === undefined) arrowHud.setRenderLoc(300,400)
 else arrowHud.setRenderLoc(arrowHUDCONFIG.x,arrowHUDCONFIG.y)
 if (arrowHUDCONFIG.toggle) arrowHud.show()
@@ -23,18 +25,13 @@ register('step',() => {
     if(Player.getHeldItem()?.getID() == "261" && arrowHUDCONFIG.toggle) {
         let twilightTotalCountThisSession = 0
         let toxicTotalCountThisSession = 0
+        let totalFlintsInInventory = 0
+
+        let arrowInInventory = false
+        let flintsInInventory = 0
+
         let inventory =  Player.getInventory()
         let quiverSlot = inventory.getStackInSlot(8).getLore()
-        for (let i=0;i<quiverSlot.length;i++) {
-            let currentLoreLine = quiverSlot[i].removeFormatting()
-            if (currentLoreLine.includes("Active Arrow:")) {
-                let arrows = currentLoreLine.match(/\((\d+)\)/);
-                if (arrows) {
-                    arrowCount = arrows[1];
-                    break
-                }
-            }
-        }
 
         inventory.getItems().forEach(item => {
             if (item == null) return
@@ -43,12 +40,32 @@ register('step',() => {
                 twilightTotalCountThisSession += item.getStackSize()
             }
             if(item.getName().removeFormatting() == "Toxic Arrow Poison") {
-                toxicTotalCountThisSession = 0 += item.getStackSize()
+                toxicTotalCountThisSession += item.getStackSize()
             }
+            if (item.getName().removeFormatting() == "Flint Arrow") {
+                flintsInInventory += item.getStackSize()
+                arrowInInventory = true
+            }
+            
         })
+        if (!arrowInInventory) {
+            for (let i=0;i<quiverSlot.length;i++) {
+                let currentLoreLine = quiverSlot[i].removeFormatting()
+                if (currentLoreLine.includes("Active Arrow:")) {
+                    let arrows = currentLoreLine.match(/\((\d+)\)/);
+                    if (arrows) {
+                        arrowCount = arrows[1];
+                        break
+                    }
+                }
+            }
+        }
+
+        totalFlintsInInventory = flintsInInventory
         twilightTotal = twilightTotalCountThisSession
         toxicTotal = toxicTotalCountThisSession
-        arrowHud.setLine(0,`&6Arrow: &f${arrowCount} &6| &dTwilight: &f${twilightTotal} &6| &aToxic: &f${toxicTotal}`)
+        if (!arrowInInventory) arrowHud.setLine(0,`&6Arrow: &f${arrowCount} &6| &dTwilight: &f${twilightTotal} &6| &aToxic: &f${toxicTotal}`)
+        else arrowHud.setLine(0,`&6Flints: &f${totalFlintsInInventory} &6| &dTwilight: &f${twilightTotal} &6| &aToxic: &f${toxicTotal}`)
     }
 }).setDelay(2)
 
@@ -72,6 +89,11 @@ register("command", (...args) => {
             ChatLib.chat('&5&l[SlayerTracker]:&ffArrow Hud has been toggled: &cOFF')
         }
     } else if (args[0].toLowerCase() === "move") {
+        arrowHud.setRenderLoc(args[1], args[2])
+        arrowHUDCONFIG.x = args[1]
+        arrowHUDCONFIG.y = args[2]
+        arrowHUDCONFIG.save()
+    } else if (args[0].toLowerCase() === "setdelay") {
         arrowHud.setRenderLoc(args[1], args[2])
         arrowHUDCONFIG.x = args[1]
         arrowHUDCONFIG.y = args[2]

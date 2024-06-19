@@ -56,9 +56,9 @@ register("command", (...args) => {
             ChatLib.chat('&5&l[SlayerTracker]:&fEffect Hud has been toggled: &cOFF')
         }
     } else if (args[0].toLowerCase() === "move") {
-        smolderingDisplay.setRenderLoc(Renderer.screen.getWidth()-130, Renderer.screen.getHeight()/2 - 140)
-        effectHUD.x = Renderer.screen.getWidth()-130
-        effectHUD.y = Renderer.screen.getHeight()/2 - 140
+        smolderingDisplay.setRenderLoc(Renderer.screen.getWidth()-100, Renderer.screen.getHeight()/2 - 140)
+        effectHUD.x = args[1]
+        effectHUD.y = args[2]
         effectHUD.save()
     }
     

@@ -263,8 +263,8 @@ register("chat", () => {
     }
     kills[typeOfSlayer][slayerTier]++
 
-    let bossSpawnedAndKilled = Math.floor((endDate - startDate) / 1000)
-    let spawnTime = Math.floor((slayerSpawnDate - startDate) / 1000)
+    let bossSpawnedAndKilled = Math.round((endDate - startDate) / 1000)
+    let spawnTime = Math.round((slayerSpawnDate - startDate) / 1000)
     let bossKilled = ((endDate - slayerSpawnDate) / 1000).toFixed(2)
     if (name !== undefined) {
         setTimeout(() => {
@@ -291,7 +291,7 @@ register('chat', (amount,event) => {
         if (tabLines[i].removeFormatting().includes("RNG Meter:")) {
             let unupdatedMeter = tabLines[i+2].removeFormatting().split("/")
             unupdatedMeter[0] = amount
-            rngMeter = `&5[RNG Meter]:${tabLines[i+1]} - &d${unupdatedMeter.join('/')}`
+            rngMeter = `&5&l[RNG Meter]:&r${tabLines[i+1]} - &d${unupdatedMeter.join('/')}`
             break
         }
     }
