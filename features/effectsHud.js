@@ -80,6 +80,7 @@ register('gameunload', () => {
 })
 
 register('step', () => {
+    
     if (effectHUD.smoldering <= 0 && effectHUD.wisp <= 0) return
     if (!Scoreboard.getTitle().removeFormatting().includes("SKYBLOCK") || inDungeons() ) return
     if (effectHUD.smoldering >= 0) effectHUD.smoldering--
@@ -88,3 +89,5 @@ register('step', () => {
     smolderingDisplay.setLine(0,` &aPolarization&r: ${minuteSecondFormat(effectHUD.smoldering)}  `)
     smolderingDisplay.setLine(1,` &fWisp&r: ${minuteSecondFormat(effectHUD.wisp)} `)
 }).setFps(1)
+
+

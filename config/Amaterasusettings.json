@@ -1,0 +1,106 @@
+[
+    {
+        "category": "Setup",
+        "settings": [
+            {
+                "type": 2,
+                "name": "apiKeyButton"
+            },
+            {
+                "type": 2,
+                "name": "apiKey"
+            }
+        ]
+    },
+    {
+        "category": "Slayer",
+        "settings": [
+            {
+                "type": 6,
+                "name": "InfoAfterBoss",
+                "value": true
+            },
+            {
+                "type": 6,
+                "name": "trackTimes",
+                "value": true
+            },
+            {
+                "type": 6,
+                "name": "rngMeter",
+                "value": true
+            }
+        ]
+    },
+    {
+        "category": "Displays",
+        "settings": [
+            {
+                "type": 6,
+                "name": "displayEffectHud",
+                "value": false
+            },
+            {
+                "type": 2,
+                "name": "displayEffectHudMoveButton"
+            },
+            {
+                "type": 6,
+                "name": "displayArrowHud",
+                "value": false
+            },
+            {
+                "type": 2,
+                "name": "displayArrowHudMoveButton"
+            }
+        ]
+    },
+    {
+        "category": "GUI",
+        "settings": [
+            {
+                "type": 9,
+                "name": "textParagraph"
+            },
+            {
+                "type": 3,
+                "name": "scheme",
+                "value": 0
+            },
+            {
+                "type": 2,
+                "name": "apply"
+            },
+            {
+                "type": 5,
+                "name": "bgColor",
+                "value": [
+                    0,
+                    0,
+                    0,
+                    80
+                ]
+            },
+            {
+                "type": 1,
+                "name": "x",
+                "value": 20
+            },
+            {
+                "type": 1,
+                "name": "y",
+                "value": 20
+            },
+            {
+                "type": 1,
+                "name": "width",
+                "value": 60
+            },
+            {
+                "type": 1,
+                "name": "height",
+                "value": 60
+            }
+        ]
+    }
+]

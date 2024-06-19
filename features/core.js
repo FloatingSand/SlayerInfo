@@ -1,19 +1,12 @@
+import settings from "../newSetting.js"
 import request from "../../requestV2/index.js";
-import Settings from "../Settings.js";
+import PogObject from "../../PogData/index.js";
 
-let apiKey = Settings.apiInput
-let apiKeyWorks = false
-let isAatrox 
+const apiKeyStored = new PogObject("SlayerMod", {
+    api_key: undefined
 
+}, "config/apiKey.json");
 
-let typeOfSlayer 
-let slayerTier
-let name
-let startDate 
-let slayerSpawnDate
-let endDate
-let spawned = false
-let questActivated = false
 
 const xp = {
     blazes: undefined,
@@ -72,14 +65,14 @@ const xpGained = {
     IV: 500,
     V: 1500,
 }
-const xpGainedVampires = {
+ const xpGainedVampires = {
     I : 10,
     II : 25,
     III : 60,
     IV : 120,
     V: 150 
 }
-const coolerSoundingNames = {
+ const coolerSoundingNames = {
     blazes: 'Inferno Demonlord',
     endermen: 'Voidgloom Seraph',
     spiders: 'Tarantula BroodFather',
@@ -87,9 +80,20 @@ const coolerSoundingNames = {
     wolves:  'Sven Packmaster',
     vampires: 'Riftstalker Bloodfiend',
 }
+let typeOfSlayer 
+let slayerTier
+let name
+let startDate 
+let slayerSpawnDate
+let endDate
+let spawned = false
+let questActivated = false
 
+let apiKey = apiKeyStored.api_key
+let apiKeyWorks = false
+let isAatrox 
 function getSlayerXP() {
-    apiKey = Settings.apiInput
+    apiKey = apiKeyStored.api_key
     let uuid = Player.getUUID().split('-').join("")
     let selectedProfile
     request({
@@ -146,12 +150,13 @@ function getSlayerXP() {
         apiKeyWorks = true
 
     }).catch(e => {
-        ChatLib.chat('&5&l[SlayerTracker]:&r&4 Unable to load data from API &r \n run &4/slayertracker reload or check API key&r')
+        ChatLib.chat('&5&l[SlayerTracker]:&r&4 Unable to load data from API &r \n run &4/slayertracker reload or apiset [API key]&r')
         ChatLib.chat(e)
     }); 
 }
 
-function checkMayor() {
+
+export function checkMayor() {
     request({
         url: `https://api.hypixel.net/v2/resources/skyblock/election`,
         json: true,
@@ -175,36 +180,11 @@ function checkMayor() {
         }
     }).catch(e => {
         setTimeout(() => {
-            ChatLib.chat('&5&l[SlayerTracker]:&r&4Failed to find out the mayor &r \n run &4/slayertracker reload or check API key&r')
-        }, 4000);
+            ChatLib.chat('&5&l[SlayerTracker]:&r&4Failed to find out the mayor &r \n run &4/slayertracker reload again&r')
+        }, 3000);
         ChatLib.chat(e)
     }); 
 }
-
-register('serverConnect', () => {
-    if (Settings.apiInput == '') {
-        setTimeout(() => {
-            ChatLib.chat('&5&l[SlayerTracker]:&r&4 run /slayertracker to set API key')
-        }, 3000);
-    } else {
-        getSlayerXP() 
-        checkMayor()
-    }  
-})
-
-register("command", (...args) => {
-    if (!args || args[0] === undefined) {
-        Settings.openGUI()
-        return
-    }
-    else if (args[0].toLocaleLowerCase() === "reload") {
-        getSlayerXP()
-        checkMayor()
-    }
-
-
-}).setName("slayertracker")
-
 
 function slayerType(name) {
     let words = name.split(" ")
@@ -256,7 +236,7 @@ register("chat", () => {
     spawned = false
     questActivated = false
 
-    if (!isAatrox && slayerType == "vampires") {
+    if (slayerType == "vampires") {
         xp[typeOfSlayer] += xpGainedVampires[slayerTier]
     } else {
         xp[typeOfSlayer] += xpGained[slayerTier]
@@ -268,41 +248,62 @@ register("chat", () => {
     let bossKilled = ((endDate - slayerSpawnDate) / 1000).toFixed(2)
     if (name !== undefined) {
         setTimeout(() => {
-            if (apiKeyWorks) {
-                ChatLib.chat(`&5&l[${name} ${slayerTier}]: &a${xp[typeOfSlayer].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}&r &dXP | &a${kills[typeOfSlayer][slayerTier].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} &dKills&r`)
-            } else {
-                ChatLib.chat("&5&l[SlayerTracker]:&r&4 Unable to fetch slayer data from API")
-                xp[typeOfSlayer] += xpGained
-                kills[typeOfSlayer][slayerTier]++
-            }
+                if (apiKeyWorks) {
+                    if (settings().InfoAfterBoss) {
+                        ChatLib.chat(`&5&l[${name} ${slayerTier}]: &a${xp[typeOfSlayer].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}&r &dXP | &a${kills[typeOfSlayer][slayerTier].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} &dKills&r`)
+                    }
+                } else {
+                    ChatLib.chat("&5&l[SlayerTracker]:&r&4 Unable to fetch slayer data from API")
+                    xp[typeOfSlayer] += xpGained
+                    kills[typeOfSlayer][slayerTier]++
+                }
                 // ChatLib.chat(`&d Slayer took &r&a${bossSpawnedAndKilled}&d seconds to spawn and kill&r`)
                 // ChatLib.chat(`&d Slayer took &r&a${bossKilled}&d seconds to kill&r`)
-                ChatLib.chat(`&5>&d Total: &a${bossSpawnedAndKilled}&d seconds | Spawn: &a${spawnTime}&d seconds | Kill: &a${bossKilled}&d seconds`)   
+                if (settings().trackTimes) {
+                    ChatLib.chat(`&5>&d Total: &a${bossSpawnedAndKilled}&d seconds | Spawn: &a${spawnTime}&d seconds | Kill: &a${bossKilled}&d seconds`)   
+                }
         }, 1000);
     }
 }).setCriteria("&r  &r&a&lSLAYER QUEST COMPLETE!&r")
 
 // rng meter
 register('chat', (amount,event) => {
-    cancel(event)
-    let tabLines = TabList.getNames()
-    let rngMeter 
-    for (let i=0;i<tabLines.length;i++) {
-        if (tabLines[i].removeFormatting().includes("RNG Meter:")) {
-            let unupdatedMeter = tabLines[i+2].removeFormatting().split("/")
-            unupdatedMeter[0] = amount
-            rngMeter = `&5&l[RNG Meter]:&r${tabLines[i+1]} - &d${unupdatedMeter.join('/')}`
-            break
+    if (settings().rngMeter) {
+        cancel(event)
+        let tabLines = TabList.getNames()
+        let rngMeter 
+        for (let i=0;i<tabLines.length;i++) {
+            if (tabLines[i].removeFormatting().includes("RNG Meter:")) {
+                let unupdatedMeter = tabLines[i+2].removeFormatting().split("/")
+                unupdatedMeter[0] = amount
+                rngMeter = `&5&l[RNG Meter]:&r${tabLines[i+1]} - &d${unupdatedMeter.join('/')}`
+                break
+            }
         }
+        setTimeout(() => {
+            ChatLib.chat(rngMeter)
+        }, 1000);
     }
-    setTimeout(() => {
-        ChatLib.chat(rngMeter)
-    }, 1000);
 
 }).setCriteria("   &dRNG Meter &f- &d${amount} Stored XP&r")
 
 
+register('serverConnect', () => {
+    getSlayerXP() 
+    checkMayor()  
+})
 
+register("command", (...args) => {
+    if (args[0] === undefined) return
+    switch(args[0].toLocaleLowerCase()) {
+        case 'reload':
+            checkMayor()
+            getSlayerXP()
+            break
+        case 'setapi':
+            apiKeyStored.api_key = args[1]
+            apiKeyStored.save() 
+    }   
 
-
+}).setName("smapi")
 
