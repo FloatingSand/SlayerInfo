@@ -2,10 +2,10 @@ import settings from "../newSetting.js"
 import request from "../../requestV2/index.js";
 import PogObject from "../../PogData/index.js";
 
-const apiKeyStored = new PogObject("SlayerMod", {
+const HUD = new PogObject("SlayerMod", {
     api_key: undefined
 
-}, "config/apiKey.json");
+}, "config/HUDLocations.json");
 
 
 const xp = {
@@ -89,11 +89,11 @@ let endDate
 let spawned = false
 let questActivated = false
 
-let apiKey = apiKeyStored.api_key
+let apiKey = HUD.api_key
 let apiKeyWorks = false
 let isAatrox 
 function getSlayerXP() {
-    apiKey = apiKeyStored.api_key
+    apiKey = HUD.api_key
     let uuid = Player.getUUID().split('-').join("")
     let selectedProfile
     request({
@@ -301,9 +301,13 @@ register("command", (...args) => {
             getSlayerXP()
             break
         case 'setapi':
-            apiKeyStored.api_key = args[1]
-            apiKeyStored.save() 
+            HUD.api_key = args[1]
+            HUD.save() 
     }   
 
 }).setName("smapi")
 
+
+export {
+    HUD
+}
