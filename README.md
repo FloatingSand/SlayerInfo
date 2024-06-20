@@ -8,4 +8,8 @@ Probably will convert this to kotlin when I stop procrastinating
 * Track boss spawn and kill times
 * Rng meter line after each kill 
 * Smoldering Polarization and Wisp's Ice-Flavored potion duration display
+* Display arrows in quiver/inventory and TAP
+
+## todo:
+update moving HUDs
 
