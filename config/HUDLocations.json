@@ -1,0 +1,13 @@
+{
+    "smoldering": 0,
+    "wisp": 0,
+    "toggleEffectHUD": false,
+    "firstLoadEffectHUD": true,
+    "toggleArrowHUD": false,
+    "firstLoadArrowHUD": true,
+    "xArrowHUD": "800",
+    "yArrowHUD": "5",
+    "api_key": "13428e2a-77c4-4351-afe7-609905cd3286",
+    "xEffectHUD": 835,
+    "yEffectHUD": 95
+}

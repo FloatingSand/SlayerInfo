@@ -10,6 +10,5 @@ Probably will convert this to kotlin when I stop procrastinating
 * Smoldering Polarization and Wisp's Ice-Flavored potion duration display
 * Display arrows in quiver/inventory and TAP
 
-## todo:
-update moving HUDs
+
 
